@@ -208,12 +208,12 @@ namespace CMDSender.Gymbal.Ronin
                 {
                     case 0x000e: // 2.3.4.1 Handheld Gimbal Position Control
                         {
-                            Console.WriteLine($"Set Position control : {ReturnCodeResult(data[14])}");
+                            Console.WriteLine($"[RESPONSE] Set Position control : {ReturnCodeResult(data[14])}");
                             break;
                         }
                     case 0x010e: // 2.3.4.1 Handheld Gimbal Position Control
                         {
-                            Console.WriteLine($"Set Speed control : {ReturnCodeResult(data[14])}");
+                            Console.WriteLine($"[RESPONSE] Set Speed control : {ReturnCodeResult(data[14])}");
                             break;
                         }
                     case 0x020e: // 2.3.4.3 Obtain Handheld Gimbal Information (GetAngle 함수)
@@ -245,7 +245,8 @@ namespace CMDSender.Gymbal.Ronin
                         }
                     case 0x070e: // Set information push of gimbal parameters. (Enable / Disable)
                         {
-                            var cmd_info_str = $"[CMD :{cmd_key_value}]  Set information push of handheld gimbal parameter {ReturnCodeResult(data[14])}";
+                            var cmd_info_str = $"Set information push of handheld gimbal parameter {ReturnCodeResult(data[14])}";
+                            Console.WriteLine($"[RESPONSE] {cmd_info_str}");
                             break;
                         }
                     case 0x080e: // Gimbal parameter push.
@@ -279,10 +280,11 @@ namespace CMDSender.Gymbal.Ronin
                             };
 
                             OnReceived(this, (CommonEventArgs)info);
+                            Console.WriteLine("[RESPONSE] Gimbal parameter push received");
                             break;
                         }
                     case 0x120e: // Focus Motor Position Control
-                        { 
+                        {
                             byte command_sub_id = data[15];
                             int motor_type = data[16];
 
@@ -296,14 +298,15 @@ namespace CMDSender.Gymbal.Ronin
                             info.Param = command_sub_id;
 
                             OnReceived(this, (CommonEventArgs)info);
+                            Console.WriteLine("[RESPONSE] Focus Motor position update");
 
                             break;
                         }
                         
                     default:
                         {
-                            Console.WriteLine("get unknown request\n");
-                            
+                            Console.WriteLine("[RESPONSE] get unknown request");
+
                             break;
                         }
                 }

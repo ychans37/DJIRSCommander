@@ -586,11 +586,14 @@ namespace CMDSender.Gymbal.Ronin
         private bool SendCanFrameMsg(byte cmd_type, byte cmd_set, byte cmd_id, byte[] cmd_data)
         {
             var cmd = cmdCombine.Combine(cmd_type, cmd_set, cmd_id, cmd_data);
-            if(cmd_type == 0x03)
-            { 
-                dataHandle.AddCommand(cmd); 
+
+            Console.WriteLine($"[SEND] type=0x{cmd_type:X2} set=0x{cmd_set:X2} id=0x{cmd_id:X2} data={BitConverter.ToString(cmd_data)}");
+
+            if (cmd_type == 0x03)
+            {
+                dataHandle.AddCommand(cmd);
             }
-            
+
             bool ret = canComm.SendCanFrameMsg(cmd);
             return ret;
         }
