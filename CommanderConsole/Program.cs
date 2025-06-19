@@ -1,6 +1,6 @@
 using System.Threading;
 using System;
-using CMDSender.Gymbal.Ronin;
+using CommanderConsole.Gimbal.Ronin;
 
 void PrintHelp()
 {
@@ -41,14 +41,8 @@ while (true)
                 }
                 ronin?.Dispose();
                 ronin = new RoninComm();
-                if (ronin.Connect(parts[1], ushort.Parse(parts[2])))
-                {
-                    Console.WriteLine("연결 성공");
-                }
-                else
-                {
-                    Console.WriteLine("연결 실패");
-                }
+                bool connected = ronin.Connect(parts[1], ushort.Parse(parts[2]));
+                Console.WriteLine(connected ? "연결 성공" : "연결 실패");
                 break;
             case "move":
                 if (ronin == null)
@@ -61,7 +55,8 @@ while (true)
                     Console.WriteLine("사용법: move yaw roll pitch time(ms)");
                     break;
                 }
-                ronin.MoveTo(short.Parse(parts[1]), short.Parse(parts[2]), short.Parse(parts[3]), short.Parse(parts[4]));
+                bool moved = ronin.MoveTo(short.Parse(parts[1]), short.Parse(parts[2]), short.Parse(parts[3]), short.Parse(parts[4]));
+                Console.WriteLine(moved ? "이동 명령 전송" : "이동 명령 실패");
                 break;
             case "speed":
                 if (ronin == null)
@@ -74,7 +69,8 @@ while (true)
                     Console.WriteLine("사용법: speed yaw roll pitch");
                     break;
                 }
-                ronin.SetSpeed(short.Parse(parts[1]), short.Parse(parts[2]), short.Parse(parts[3]));
+                bool sped = ronin.SetSpeed(short.Parse(parts[1]), short.Parse(parts[2]), short.Parse(parts[3]));
+                Console.WriteLine(sped ? "속도 설정 완료" : "속도 설정 실패");
                 break;
             case "getangle":
                 if (ronin == null)
@@ -82,10 +78,12 @@ while (true)
                     Console.WriteLine("먼저 connect 명령을 사용하세요.");
                     break;
                 }
-                ronin.GetAngle();
+                bool angleOk = ronin.GetAngle();
                 Thread.Sleep(200);
                 var att = ronin.Info.AttitudeAngle;
-                Console.WriteLine($"Yaw={att.Yaw} Roll={att.Roll} Pitch={att.Pitch}");
+                Console.WriteLine(angleOk
+                    ? $"Yaw={att.Yaw} Roll={att.Roll} Pitch={att.Pitch}"
+                    : "각도 요청 실패");
                 break;
             case "recenter":
                 if (ronin == null)
@@ -93,7 +91,8 @@ while (true)
                     Console.WriteLine("먼저 connect 명령을 사용하세요.");
                     break;
                 }
-                ronin.Recenter();
+                bool recentered = ronin.Recenter();
+                Console.WriteLine(recentered ? "리센터 명령 전송" : "리센터 실패");
                 break;
             case "version":
                 if (ronin == null)
@@ -101,9 +100,10 @@ while (true)
                     Console.WriteLine("먼저 connect 명령을 사용하세요.");
                     break;
                 }
-                ronin.GetVersion(true);
+                bool verOk = ronin.GetVersion(true);
                 Thread.Sleep(200);
-                Console.WriteLine($"Version: {ronin.Info.VersionNumber}");
+                Console.WriteLine(verOk ?
+                    $"Version: {ronin.Info.VersionNumber}" : "버전 요청 실패");
                 break;
             case "help":
                 PrintHelp();
