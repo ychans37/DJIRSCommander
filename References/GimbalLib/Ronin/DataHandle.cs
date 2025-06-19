@@ -168,6 +168,8 @@ namespace CMDSender.Gymbal.Ronin
             bool is_ok = false;
             byte[] cmd_key = new byte[2] {0,0};
 
+            Console.WriteLine($"RECV: {data.ByteArrayToHexString()}");
+
             // If it is a response frame, need to check the corresponding send command
             if (cmd_type == 0x20)
             {
