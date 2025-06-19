@@ -165,6 +165,15 @@ namespace CMDSender.Gymbal.Ronin
         void ProcessCMD(byte[] data)
         {
             byte cmd_type = (byte)data[3];
+            ConsoleColor color = ConsoleColor.Yellow;
+            if (cmd_type == 0x20)
+            {
+                color = data[14] == 0x00 ? ConsoleColor.Green : ConsoleColor.Red;
+            }
+            Console.ForegroundColor = color;
+            Console.WriteLine($"RX: {data.ByteArrayToHexString()}");
+            Console.ResetColor();
+
             bool is_ok = false;
             byte[] cmd_key = new byte[2] {0,0};
 

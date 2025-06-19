@@ -587,10 +587,14 @@ namespace CMDSender.Gymbal.Ronin
         {
             var cmd = cmdCombine.Combine(cmd_type, cmd_set, cmd_id, cmd_data);
             if(cmd_type == 0x03)
-            { 
-                dataHandle.AddCommand(cmd); 
+            {
+                dataHandle.AddCommand(cmd);
             }
-            
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"TX: {cmd.ByteArrayToHexString()}");
+            Console.ResetColor();
+
             bool ret = canComm.SendCanFrameMsg(cmd);
             return ret;
         }
